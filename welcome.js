@@ -33,6 +33,38 @@ bot.on('message', function(data) {
 });
 
 
+function mQue() {
+  // Read file  
+  var fs = require('fs')
+     , filename = "input.txt"; //process.argv[2];
+  fs.readFile(filename, 'utf8', function(err, data) {
+    if (err) throw err;
+    console.log('---  ' + new Date().toString());  
+    console.log(data);
+    console.log('---');
+  
+    if (data == "MUCH SPEND"){
+      console.log("MUCH SPEND !!!");    
+    }  
+  
+    if (data == "WEEK")
+    {
+      console.log("WEEK");   
+    }
+  });
+  
+}
+
+setInterval(function() {
+   mQue(); 
+}, 1000);
+
+
+/*setTimeout(function() {
+   hello(); 
+}, 1000);
+*/
+    
 
 // He will be at a bar
 // Next Morning: We send a message: "Hi Nick. You spend 800 kr yesterday at at bar. This will delay the bike with a month. Sad gif."
