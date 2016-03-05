@@ -10,10 +10,28 @@ var bot = new SlackBot({
 bot.on('start', function() {
     var params =  {
         icon_emoji: ':speaking_head_in_silhouette:'
+        //,
+        //image_url: "http://www.dr.dk/drdkGlobal/spot/Images/fokusbaand/xfactor_2016.jpg"
     };    
     
-    bot.postMessageToUser('nsl', 'Hi Nick. I am your advisor. I will help you get the bike.', params);
-    bot.postMessageToUser('nsl', 'This is how your financials looks now', params);
+    var data1 = { "attachments": [
+        {
+            "fallback": "Financial status",
+            "title": "Current status",
+            "title_link": "https://public.tableau.com/views/Exampleexpenses/Dashboard1?:embed=y&:display_count=yes&:showTabs=y&:toolbar=no",
+            "text": "Illustration of your expenses",
+            "image_url": "http://pop-profiles.s3.amazonaws.com/domains/finbot.co/w3rKJxebQVKwOplfZQLv_screen_shot_2016-03-05_at_18.14.04.png",
+            "color": "#764FA5"
+        }
+    ]}
+    /*var data1 = {
+        attachments: [
+        {
+          image_url: "http://www.dr.dk/drdkGlobal/spot/Images/fokusbaand/xfactor_2016.jpg"
+        }]
+    }*/
+    bot.postMessageToUser('nsl', 'Hi Nick. I am your advisor. I will help you get the bike.\n' +
+                                 'This is how your financials looks now', data1, params);
      
     bot.postMessageToChannel('log', 'welcome sendt (' + new Date().toString() + ')');         
 });
@@ -61,11 +79,11 @@ function mQue() {
   
     if (data == "MUCH SPEND" && sendmessage){
       params = {
-        icon_emoji: ':+1:'    
+        icon_emoji: ':-1:'    
       };
       
-      bot.postMessageToUser('nsl', 'Hi Nick. You spend 800 kr yesterday at at bar. This will delay the bike with a month. Sad gif.', params);
-      bot.postMessageToUser('nsl', 'I will keep my eyes on you', params);
+      bot.postMessageToUser('nsl', 'Hi Nick. You spend 800 kr yesterday at at bar. This will delay the bike with a month. \n' +
+                                   'I will keep my eyes on you', params);
       bot.postMessageToChannel('log', 'to much spent sent (' + new Date().toString() + ')');         
       console.log("MUCH SPEND !!!");    
     }  
@@ -73,11 +91,11 @@ function mQue() {
     if (data == "WEEK" && sendmessage)
     {
       params = {
-        icon_emoji: ':joy:'    
+        icon_emoji: ':+1:'    
       };
 
-      bot.postMessageToUser('nsl', 'Hey - you only spend 150 kr last night', params);
-      bot.postMessageToUser('nsl', '<https://media.giphy.com/media/byfdmRqwNKYec/giphy.gif>', params);
+      bot.postMessageToUser('nsl', 'Hey - you only spend 150 kr last night.\n' +
+                            'https://media.giphy.com/media/byfdmRqwNKYec/giphy.gif', params);
 
       bot.postMessageToChannel('log', 'week sendt (' + new Date().toString() + ')');         
         
