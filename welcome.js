@@ -3,7 +3,8 @@ var SlackBot = require('slackbots');
 // create a bot 
 var bot = new SlackBot({
     token: 'xoxb-24619394502-UFprDkLgIkShyXnvJz0ebHd7', // Add a bot https://my.slack.com/services/new/bot and put the token  
-    name: 'My Bot'
+    name: 'My Bot',
+    old: ''
 });
 
 bot.on('start', function() {
@@ -12,7 +13,8 @@ bot.on('start', function() {
     };    
     
     bot.postMessageToUser('nsl', 'Hi Nick. I am your advisor. I will help you get the bike.', params);
-    bot.postMessageToUser('nsl', 'This is how your financials looks now', params); 
+    bot.postMessageToUser('nsl', 'This is how your financials looks now', params);
+     
     bot.postMessageToChannel('log', 'welcome sendt (' + new Date().toString() + ')');         
 });
 
@@ -26,31 +28,62 @@ bot.on('message', function(data) {
     
     if (data.type === 'message')
     {
+        if (data.text == 'shutup'){
+            bot.postMessageToUser('nsl', 'I will take a break for 24H. Have fun !', params);
+ 
+        }
        console.log(data);
-       bot.postMessageToChannel('log', 'someone entered (' + data.text + ')');        
+//       bot.postMessageToChannel('log', 'someone entered (' + data.text + ')');        
 //        bot.postMessageToUser('nsl', 'hello you: ' + data.text, params);
     }
 });
 
+var old = '';
 
 function mQue() {
+  var sendmessage = false;
+  
   // Read file  
   var fs = require('fs')
      , filename = "input.txt"; //process.argv[2];
   fs.readFile(filename, 'utf8', function(err, data) {
     if (err) throw err;
-    console.log('---  ' + new Date().toString());  
-    console.log(data);
-    console.log('---');
+    console.log('--- check  ' + new Date().toString() + data);  
+    
+    if (data != old){
+      sendmessage = true;    
+    }
+    old = data;
   
-    if (data == "MUCH SPEND"){
+    var params = {
+        icon_emoji: ':+1:'    
+    };
+  
+    if (data == "MUCH SPEND" && sendmessage){
+      params = {
+        icon_emoji: ':+1:'    
+      };
+      
+      bot.postMessageToUser('nsl', 'Hi Nick. You spend 800 kr yesterday at at bar. This will delay the bike with a month. Sad gif.', params);
+      bot.postMessageToUser('nsl', 'I will keep my eyes on you', params);
+      bot.postMessageToChannel('log', 'to much spent sent (' + new Date().toString() + ')');         
       console.log("MUCH SPEND !!!");    
     }  
   
-    if (data == "WEEK")
+    if (data == "WEEK" && sendmessage)
     {
-      console.log("WEEK");   
+      params = {
+        icon_emoji: ':joy:'    
+      };
+
+      bot.postMessageToUser('nsl', 'Hey - you only spend 150 kr last night', params);
+      bot.postMessageToUser('nsl', '<https://media.giphy.com/media/byfdmRqwNKYec/giphy.gif>', params);
+
+      bot.postMessageToChannel('log', 'week sendt (' + new Date().toString() + ')');         
+        
+      console.log("--> SEND WEEK");   
     }
+    return old;
   });
   
 }
